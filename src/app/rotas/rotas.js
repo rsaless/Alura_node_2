@@ -3,18 +3,7 @@ const db = require('../../config/database');
 
 module.exports = (app) => {
     app.get('/', (req, res) => {
-        res.send(
-            `
-                <html>
-                    <head>
-                        <meta charset="utf-8">
-                    </head>
-                    <body>
-                        <h1>Casa do Código</h1>
-                    </body>
-                </html>
-            `
-        );
+        res.marko(require('../views/base/home/home.marko'));
     });
     
     app.get('/livros', (req, res) => {
@@ -24,7 +13,7 @@ module.exports = (app) => {
     });
 
     app.get('/livros/form', (req, res) => {
-        res.marko(require('../views/livros/form/form.marko'),{livro: {}});
+        res.marko(require('../views/livros/form/form.marko'),{ livro: {} });
     });
 
     app.get('/livros/form/:id', (req, res) => {
