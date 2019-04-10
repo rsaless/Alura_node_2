@@ -23,4 +23,16 @@ app.use(methodOverride((req, res) => {
 
 rotas(app);
 
+app.use((req, res, next) => {
+    return res.status(404).marko(
+        require('../app/views/base/erros/404.marko')
+    );
+});
+
+app.use((erro, req, res, next) => {
+    return res.status(500).marko(
+        require('../app/views/base/erros/500.marko')
+    );
+});
+
 module.exports = app;
