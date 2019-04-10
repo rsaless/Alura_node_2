@@ -1,59 +1,8 @@
-const {check, validationResult} = require('express-validator/check');
-const LivroDao = require('../infra/livro-dao');
-const db = require('../../config/database');
+const livroRotas = require('./livro-rotas');
+const baseRotas = require('./base-rotas');
 
 module.exports = (app) => {
-    app.get('/', (req, res) => {
-        res.marko(require('../views/base/home/home.marko'));
-    });
-    
-    app.get('/livros', (req, res) => {
-        new LivroDao(db).lista()
-            .then(livros => res.marko(require('../views/livros/lista/lista.marko'),{livros}))
-            .catch(erro => console.log(erro));
-    });
-
-    app.get('/livros/form', (req, res) => {
-        res.marko(require('../views/livros/form/form.marko'),{ livro: {} });
-    });
-
-    app.get('/livros/form/:id', (req, res) => {
-        const id = req.params.id;
-        console.log(req.body);
-        new LivroDao(db).buscaPorId(id)
-        .then(livro => res.marko(require('../views/livros/form/form.marko'), {livro: livro}))
-        .catch(erro => console.log(erro))
-    });
-
-    app.post('/livros', [
-        check('titulo').isLength({min: 5}).withMessage('O título precisa ter no mínimo 5 caracteres!'),
-        check('preco').isCurrency().withMessage('O preço precisa ter um valor monetário válido!')
-    ], (req,res) => {
-        console.log(req.body);
-        const erros = validationResult(req);
-        if(!erros.isEmpty()){
-            return res.marko(
-                require('../views/livros/form/form.marko'),
-                {livro: req.body, errosValidacao: erros.array()}
-            );
-        }
-        new LivroDao(db).adiciona(req.body)
-            .then(res.redirect('/livros'))
-            .catch(erro => console.log(erro));
-    });
-
-    app.put('/livros', (req,res) => {
-        console.log(req.body);
-        new LivroDao(db).atualiza(req.body)
-            .then(res.redirect('/livros'))
-            .catch(erro => console.log(erro));
-    });
-
-    app.delete('/livros/:id', (req, res) => {
-        const id = req.params.id;
-        new LivroDao(db).remove(id)
-            .then(() => res.status(200).end())
-            .catch(erro => console.log(erro))
-    });
+    baseRotas(app);
+    livroRotas(app);
 }
 

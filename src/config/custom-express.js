@@ -7,6 +7,8 @@ const rotas = require('../app/rotas/rotas');        // importa as rotas
 const bodyParser = require('body-parser');          // importa o body-parser, necessário para obter dados inseridos no form e enviados pelo post
 const methodOverride = require('method-override');  
 
+const templates = require('../app/views/templates');
+
 app.use('*', (req, res, next) => {
     //console.log('olá');
     next();
@@ -24,15 +26,11 @@ app.use(methodOverride((req, res) => {
 rotas(app);
 
 app.use((req, res, next) => {
-    return res.status(404).marko(
-        require('../app/views/base/erros/404.marko')
-    );
+    return res.status(404).marko(templates.base.erro404);
 });
 
 app.use((erro, req, res, next) => {
-    return res.status(500).marko(
-        require('../app/views/base/erros/500.marko')
-    );
+    return res.status(500).marko(templates.base.erro500);
 });
 
 module.exports = app;
