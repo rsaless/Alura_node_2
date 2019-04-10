@@ -55,12 +55,12 @@ bd.serialize(() => {
     bd.run(LIVROS_SCHEMA);
     bd.run(INSERIR_LIVRO_1);
     bd.run(INSERIR_LIVRO_2);
-    /*
+    
     bd.each("SELECT * FROM usuarios", (err, usuario) => {
         console.log('Usuário: ');
         console.log(usuario);
     });
-    */
+   
 });
 
 process.on('SIGINT', () => 
